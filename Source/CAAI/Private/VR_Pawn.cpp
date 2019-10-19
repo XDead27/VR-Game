@@ -15,20 +15,20 @@ AVR_Pawn::AVR_Pawn()
 	PrimaryActorTick.bCanEverTick = true;
 
 	///Component Init
-	RootSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root Scene Component"));
+	RootSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootSceneComponent"));
 	RootComponent = RootSceneComponent;
 
-	CameraSceneComponent = CreateDefaultSubobject<USceneComponent>(FName("Camera Component"));
+	CameraSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("CameraComponent"));
 	CameraSceneComponent->SetupAttachment(RootComponent);
 
-	CameraComponent = CreateDefaultSubobject<UCameraComponent>(FName("Camera"));
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("HeadCamera"));
 	CameraComponent->SetupAttachment(CameraSceneComponent);
 
-	LeftMotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("Left Motion Controller"));
+	LeftMotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("LeftMotionController"));
 	LeftMotionController->SetupAttachment(RootComponent);
 	LeftMotionController->MotionSource = "Left";
 
-	RightMotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("Right Motion Controller"));
+	RightMotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("RightMotionController"));
 	RightMotionController->SetupAttachment(RootComponent);
 	RightMotionController->MotionSource = "Right";
 
