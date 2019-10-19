@@ -28,7 +28,7 @@ public:
 	class USceneComponent* CameraSceneComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	class USceneComponent* CameraComponent;
+	class USceneComponent* CameraComponen;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UMotionControllerComponent* LeftMotionController;

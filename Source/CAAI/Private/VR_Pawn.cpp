@@ -18,10 +18,10 @@ AVR_Pawn::AVR_Pawn()
 	RootSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root Scene Component"));
 	RootComponent = RootSceneComponent;
 
-	CameraSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Camera Component"));
+	CameraSceneComponent = CreateDefaultSubobject<USceneComponent>(FName("Camera Component"));
 	CameraSceneComponent->SetupAttachment(RootComponent);
 
-	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>(FName("Camera"));
 	CameraComponent->SetupAttachment(CameraSceneComponent);
 
 	LeftMotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("Left Motion Controller"));
