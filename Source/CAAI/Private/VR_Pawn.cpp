@@ -26,11 +26,11 @@ AVR_Pawn::AVR_Pawn()
 
 	LeftMotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("LeftMotionController"));
 	LeftMotionController->SetupAttachment(RootComponent);
-	LeftMotionController->MotionSource = "Left";
+	//LeftMotionController->MotionSource = TEXT("Left");
 
 	RightMotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("RightMotionController"));
 	RightMotionController->SetupAttachment(RootComponent);
-	RightMotionController->MotionSource = "Right";
+	//RightMotionController->SetTrackingMotionSource(TEXT("Right"));
 
 	
 
@@ -58,5 +58,14 @@ void AVR_Pawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void AVR_Pawn::TraceTeleport()
+{
+}
+
+FVector AVR_Pawn::TraceTeleportLocation()
+{
+	return FVector();
 }
 
