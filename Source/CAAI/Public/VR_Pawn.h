@@ -30,12 +30,15 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* CameraComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class UMotionControllerComponent* LeftMotionController;
+	///Variables
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AHandController> HandSpawn;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class UMotionControllerComponent* RightMotionController;
+	UPROPERTY(BlueprintReadWrite)
+	class AHandController* MotionL;
 
+	UPROPERTY(BlueprintReadWrite)
+	class AHandController* MotionR;
 
 	///Functions
 	// Called every frame
@@ -44,10 +47,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	//TODO
-	void TraceTeleport();
-
-	FVector TraceTeleportLocation();
-
+	void GrabL();
+	void GrabR();
+	void DropL();
+	void DropR();
 
 };

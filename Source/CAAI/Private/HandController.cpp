@@ -7,6 +7,7 @@
 #include "Components/SphereComponent.h"
 #include "MotionControllerComponent.h"
 #include "PickupInterface.h"
+#include "SteamVRChaperoneComponent.h"
 
 // Sets default values
 AHandController::AHandController()
@@ -15,12 +16,11 @@ AHandController::AHandController()
 	PrimaryActorTick.bCanEverTick = true;
 
 	///Component Init
-	Scene = CreateDefaultSubobject<USceneComponent>(TEXT("Scene"));
-	RootComponent = Scene;
+	//Scene = CreateDefaultSubobject<USceneComponent>(TEXT("Scene"));
+	//RootComponent = Scene;
 
 	MotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("Motion Controller"));
-	MotionController->SetupAttachment(RootComponent);
-	MotionController->MotionSource = Hand;
+	RootComponent = MotionController;
 
 	HandMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Hand Mesh"));
 	HandMesh->SetupAttachment(MotionController);
@@ -28,8 +28,15 @@ AHandController::AHandController()
 	GrabCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Grab Sphere"));
 	GrabCollision->SetupAttachment(HandMesh);
 
+	SteamVRChaperone = CreateDefaultSubobject<USteamVRChaperoneComponent>(TEXT("VR Chaperone"));
+}
 
-
+//Constructor-like function for variables 
+//Called with Deffered Spawn
+void AHandController::Initialize(FName MotionSource)
+{
+	MotionController->MotionSource = MotionSource;
+	this->Hand = MotionSource;
 }
 
 // Called when the game starts or when spawned
@@ -37,8 +44,9 @@ void AHandController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	
 	if (Hand == "Left") {
-		HandMesh->SetRelativeScale3D(FVector(1.0, 1.0, -1.0));
+		MotionController->SetRelativeRotation(FRotator(0.0, 0.0, 180.0));
 	}
 
 	
@@ -49,6 +57,11 @@ void AHandController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+AActor * AHandController::GetGrabbedActor()
+{
+	return GrabbedActor;
 }
 
 void AHandController::Grab()
@@ -75,6 +88,22 @@ void AHandController::Grab()
 	if (NearestOverlap) {
 		IPickupInterface* PickupInterface = Cast<IPickupInterface>(NearestOverlap);
 		PickupInterface->Execute_Pickup(NearestOverlap, HandMesh);
+
+		//Store the grabbed actor
+		GrabbedActor = NearestOverlap;
+	}
+
+}
+
+void AHandController::Drop()
+{
+	if (GrabbedActor && GrabbedActor->GetRootComponent()->GetAttachParent() == HandMesh) {
+		IPickupInterface* PickupInterface = Cast<IPickupInterface>(GrabbedActor);
+		if (PickupInterface) {
+			PickupInterface->Execute_Drop(GrabbedActor);
+		}
+
+		GrabbedActor = nullptr;
 	}
 }
 

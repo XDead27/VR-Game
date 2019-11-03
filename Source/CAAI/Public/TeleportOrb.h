@@ -21,6 +21,15 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	///COMPONENTS
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	class UStaticMeshComponent* Mesh;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	class USphereComponent* SphereCollision;
+
+
+	///FUNCTIONS
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MyCategory")
 	void Pickup(USceneComponent* AttachTo);
 	virtual void Pickup_Implementation(USceneComponent* AttachTo) override;
@@ -28,6 +37,13 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MyCategory")
 	void Drop();
 	virtual void Drop_Implementation() override;
+	
+	UFUNCTION()
+	void Teleport(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	///VARIABLES
+	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	class APawn* PawnToTeleport;
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
