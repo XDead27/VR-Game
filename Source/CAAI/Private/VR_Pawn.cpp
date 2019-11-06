@@ -41,13 +41,13 @@ void AVR_Pawn::BeginPlay()
 	
 	//Spawn Motion Controllers With Deffer
 	
-	MotionL = Cast<AHandController>(UGameplayStatics::BeginDeferredActorSpawnFromClass(this, HandSpawn, RootComponent->GetComponentTransform(), ESpawnActorCollisionHandlingMethod::Undefined, this));
+	MotionL = Cast<AHandController>(UGameplayStatics::BeginDeferredActorSpawnFromClass(this, HandSpawn, FTransform(FRotator(0, 0, 0), FVector(0, 0, 0)), ESpawnActorCollisionHandlingMethod::Undefined, this));
 	if (MotionL) {
 		MotionL->Initialize("Left");
 
-		UGameplayStatics::FinishSpawningActor(MotionL, RootComponent->GetComponentTransform());
+		UGameplayStatics::FinishSpawningActor(MotionL, FTransform(FRotator(0, 0, 0), FVector(0, 0, 0)));
 
-		MotionL->AttachToComponent(CameraSceneComponent, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, false));
+		MotionL->AttachToComponent(CameraSceneComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	}
 
 	MotionR = Cast<AHandController>(UGameplayStatics::BeginDeferredActorSpawnFromClass(this, HandSpawn, RootComponent->GetComponentTransform(), ESpawnActorCollisionHandlingMethod::Undefined, this));
@@ -56,7 +56,7 @@ void AVR_Pawn::BeginPlay()
 
 		UGameplayStatics::FinishSpawningActor(MotionR, RootComponent->GetComponentTransform());
 
-		MotionR->AttachToComponent(CameraSceneComponent, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, false));
+		MotionR->AttachToComponent(CameraSceneComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 
 	}
 
