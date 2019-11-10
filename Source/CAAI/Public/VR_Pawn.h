@@ -51,5 +51,11 @@ public:
 	void GrabR();
 	void DropL();
 	void DropR();
+	void UseL();
+	void StopUsingL();
+	void UseR(); //TODO add a usable interface for later assets with various abilities
+
+private:
+	float DilationScale = 0.1f;
 
 };

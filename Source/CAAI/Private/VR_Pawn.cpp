@@ -10,6 +10,7 @@
 #include "HandController.h"
 #include "Kismet/GameplayStatics.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
+#include "GameFramework/WorldSettings.h"
 
 // Sets default values
 AVR_Pawn::AVR_Pawn()
@@ -46,7 +47,7 @@ void AVR_Pawn::BeginPlay()
 
 		UGameplayStatics::FinishSpawningActor(MotionL, RootComponent->GetComponentTransform());
 
-		MotionL->GetRootComponent()->AttachToComponent(RootSceneComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+		MotionL->AttachToComponent(RootSceneComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	}
 
 	MotionR = Cast<AHandController>(UGameplayStatics::BeginDeferredActorSpawnFromClass(this, HandSpawn, RootComponent->GetComponentTransform(), ESpawnActorCollisionHandlingMethod::Undefined, this));
@@ -78,6 +79,8 @@ void AVR_Pawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	InputComponent->BindAction("GrabR", IE_Pressed, this, &AVR_Pawn::GrabR);
 	InputComponent->BindAction("GrabL", IE_Released, this, &AVR_Pawn::DropL);
 	InputComponent->BindAction("GrabR", IE_Released, this, &AVR_Pawn::DropR);
+	InputComponent->BindAction("UseL", IE_Pressed, this, &AVR_Pawn::UseL);
+	InputComponent->BindAction("UseL", IE_Released, this, &AVR_Pawn::StopUsingL);
 }
 
 void AVR_Pawn::GrabL()
@@ -98,6 +101,21 @@ void AVR_Pawn::DropL()
 void AVR_Pawn::DropR()
 {
 	MotionR->Drop();
+}
+
+void AVR_Pawn::UseL()
+{
+	GetWorld()->GetWorldSettings()->SetTimeDilation(DilationScale);
+	UE_LOG(LogTemp, Warning, TEXT("Hello"))
+}
+
+void AVR_Pawn::StopUsingL()
+{
+	GetWorld()->GetWorldSettings()->SetTimeDilation(1.0f);
+}
+
+void AVR_Pawn::UseR()
+{
 }
 
 
