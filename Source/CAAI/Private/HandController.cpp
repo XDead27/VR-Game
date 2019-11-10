@@ -16,11 +16,11 @@ AHandController::AHandController()
 	PrimaryActorTick.bCanEverTick = true;
 
 	///Component Init
-	//Scene = CreateDefaultSubobject<USceneComponent>(TEXT("Scene"));
-	//RootComponent = Scene;
+	Scene = CreateDefaultSubobject<USceneComponent>(TEXT("Scene"));
+	RootComponent = Scene;
 
 	MotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("Motion Controller"));
-	RootComponent = MotionController;
+	MotionController->SetupAttachment(Scene);
 
 	HandMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Hand Mesh"));
 	HandMesh->SetupAttachment(MotionController);
@@ -28,7 +28,7 @@ AHandController::AHandController()
 	GrabCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Grab Sphere"));
 	GrabCollision->SetupAttachment(HandMesh);
 
-	SteamVRChaperone = CreateDefaultSubobject<USteamVRChaperoneComponent>(TEXT("VR Chaperone"));
+	//SteamVRChaperone = CreateDefaultSubobject<USteamVRChaperoneComponent>(TEXT("VR Chaperone"));
 }
 
 //Constructor-like function for variables 
@@ -37,6 +37,13 @@ void AHandController::Initialize(FName MotionSource)
 {
 	MotionController->MotionSource = MotionSource;
 	this->Hand = MotionSource;
+
+	if (Hand == "Left") {
+		MotionController->SetRelativeRotation(FRotator(0.0, 0.0, 180.0));
+	}
+	else {
+		MotionController->SetRelativeRotation(FRotator(0.0, 0.0, 0.0));
+	}
 }
 
 // Called when the game starts or when spawned
@@ -44,12 +51,6 @@ void AHandController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	
-	if (Hand == "Left") {
-		MotionController->SetRelativeRotation(FRotator(0.0, 0.0, 180.0));
-	}
-
-	
 }
 
 // Called every frame

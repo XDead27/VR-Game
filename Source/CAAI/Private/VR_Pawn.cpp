@@ -28,7 +28,7 @@ AVR_Pawn::AVR_Pawn()
 	CameraComponent->SetupAttachment(CameraSceneComponent);
 
 
-	///VariableInit
+	///Variable Init
 	BaseEyeHeight = 0.0;
 }
 
@@ -38,16 +38,15 @@ void AVR_Pawn::BeginPlay()
 	Super::BeginPlay();
 
 	
-	
 	//Spawn Motion Controllers With Deffer
 	
-	MotionL = Cast<AHandController>(UGameplayStatics::BeginDeferredActorSpawnFromClass(this, HandSpawn, FTransform(FRotator(0, 0, 0), FVector(0, 0, 0)), ESpawnActorCollisionHandlingMethod::Undefined, this));
+	MotionL = Cast<AHandController>(UGameplayStatics::BeginDeferredActorSpawnFromClass(this, HandSpawn, RootComponent->GetComponentTransform(), ESpawnActorCollisionHandlingMethod::Undefined, this));
 	if (MotionL) {
 		MotionL->Initialize("Left");
 
-		UGameplayStatics::FinishSpawningActor(MotionL, FTransform(FRotator(0, 0, 0), FVector(0, 0, 0)));
+		UGameplayStatics::FinishSpawningActor(MotionL, RootComponent->GetComponentTransform());
 
-		MotionL->AttachToComponent(CameraSceneComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+		MotionL->GetRootComponent()->AttachToComponent(RootSceneComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	}
 
 	MotionR = Cast<AHandController>(UGameplayStatics::BeginDeferredActorSpawnFromClass(this, HandSpawn, RootComponent->GetComponentTransform(), ESpawnActorCollisionHandlingMethod::Undefined, this));
@@ -56,9 +55,10 @@ void AVR_Pawn::BeginPlay()
 
 		UGameplayStatics::FinishSpawningActor(MotionR, RootComponent->GetComponentTransform());
 
-		MotionR->AttachToComponent(CameraSceneComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+		MotionR->AttachToComponent(RootSceneComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 
 	}
+
 
 }
 
