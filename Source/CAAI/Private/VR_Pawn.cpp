@@ -106,7 +106,6 @@ void AVR_Pawn::DropR()
 void AVR_Pawn::UseL()
 {
 	GetWorld()->GetWorldSettings()->SetTimeDilation(DilationScale);
-	UE_LOG(LogTemp, Warning, TEXT("Hello"))
 }
 
 void AVR_Pawn::StopUsingL()
