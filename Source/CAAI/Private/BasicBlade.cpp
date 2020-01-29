@@ -26,7 +26,8 @@ void ABasicBlade::BeginPlay()
 {
 	Super::BeginPlay();
 
-	BoxCollision->OnComponentHit.AddDynamic(this, &ABasicBlade::MountBlade);
+	//BoxCollision->OnComponentHit.AddDynamic(this, &ABasicBlade::MountBlade);
+	BoxCollision->OnComponentBeginOverlap.AddDynamic(this, &ABasicBlade::MountBlade);
 	
 }
 
@@ -39,33 +40,45 @@ void ABasicBlade::Tick(float DeltaTime)
 
 void ABasicBlade::Pickup_Implementation(USceneComponent* AttachTo)
 {
-	if (RootComponent->GetAttachParent() != nullptr) {
-		RootComponent->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, false));
+	if (AttachTo->GetAttachmentRoot() != RootComponent->GetAttachParent()->GetAttachmentRoot()) {
+		
+		UE_LOG(LogTemp, Warning, TEXT("Atasez de %s"), *AttachTo->GetName())
+
+		if (RootComponent->GetAttachParent() != nullptr) {
+			RootComponent->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, false));
+			UE_LOG(LogTemp, Warning, TEXT("%s is different from %s"), *RootComponent->GetAttachParent()->GetAttachmentRoot()->GetName(), *AttachTo->GetAttachmentRoot()->GetName())
+		}
+		BladeMesh->SetSimulatePhysics(false);
+
+		RootComponent->AttachToComponent(AttachTo, FAttachmentTransformRules(EAttachmentRule::KeepWorld, false));
+
+		bIsInHand = true;
+		bIsMounted = false;
 	}
-
-	BladeMesh->SetSimulatePhysics(false);
-
-	RootComponent->AttachToComponent(AttachTo, FAttachmentTransformRules(EAttachmentRule::KeepWorld, false));
-
-	bIsInHand = true;
+	
 }
 
 void ABasicBlade::Drop_Implementation()
 {
-	RootComponent->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, false));
+	if (!bIsMounted) {
+		RootComponent->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, false));
 
-	BladeMesh->SetSimulatePhysics(true);
+		BladeMesh->SetSimulatePhysics(true);
 
-	bIsInHand = false;
+		bIsInHand = false;
+		bIsMounted = false;
+	}
 
 }
 
-void ABasicBlade::MountBlade(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
+void ABasicBlade::MountBlade(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	AHandController* OtherHand = Cast<AHandController>(OtherActor);
-	if (bIsInHand && OtherHand && OtherActor != GetAttachParentActor()) {
+
+	if (bIsInHand && OtherHand != nullptr && OtherActor != GetAttachParentActor()) {
 		RootComponent->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, false));
 		bIsInHand = false;
+		bIsMounted = true;
 
 		RootComponent->AttachToComponent(OtherHand->HandMesh, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), "BladeSocket");
 

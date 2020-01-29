@@ -103,8 +103,9 @@ void AHandController::Drop()
 		if (PickupInterface) {
 			PickupInterface->Execute_Drop(GrabbedActor);
 		}
-
-		GrabbedActor = nullptr;
 	}
+
+	GrabbedActor = nullptr;
+
 }
 
