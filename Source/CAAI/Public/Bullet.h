@@ -15,10 +15,10 @@ public:
 	// Sets default values for this actor's properties
 	ABullet();
 
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	class UStaticMeshComponent* BulletMesh;
 
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	class UProjectileMovementComponent* BulletMovement;
 
 protected:

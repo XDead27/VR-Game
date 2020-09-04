@@ -23,6 +23,7 @@ void ABullet::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	UE_LOG(LogTemp, Warning, TEXT("I spawned uwu"))
 }
 
 // Called every frame

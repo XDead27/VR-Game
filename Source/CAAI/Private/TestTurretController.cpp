@@ -12,10 +12,11 @@ void ATestTurretController::BeginPlay()
 
 	ControlledTurret = Cast<ATestTurret>(GetPawn());
 
-	//GetWorldTimerManager().SetTimer(tHandle, &ATestTurret::Shoot, 5.0f, 1.0f);
+	GetWorldTimerManager().SetTimer(tHandle, ControlledTurret, &ATestTurret::Shoot, 5.0f, true, 1.0f);
 }
 
 void ATestTurretController::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
 
 }
+

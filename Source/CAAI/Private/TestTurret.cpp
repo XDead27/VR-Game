@@ -75,8 +75,8 @@ void ATestTurret::Tick(float DeltaTime)
 
 		HeadMesh->AddRelativeRotation(Delta);
 
-		UE_LOG(LogTemp, Warning, TEXT("LookAt: %f, %f, %f"), LookAt.Roll, LookAt.Yaw, LookAt.Pitch)
-		UE_LOG(LogTemp, Warning, TEXT("Delta: %f, %f, %f"), Delta.Roll, Delta.Yaw, Delta.Pitch)
+		//UE_LOG(LogTemp, Warning, TEXT("LookAt: %f, %f, %f"), LookAt.Roll, LookAt.Yaw, LookAt.Pitch)
+		//UE_LOG(LogTemp, Warning, TEXT("Delta: %f, %f, %f"), Delta.Roll, Delta.Yaw, Delta.Pitch)
 	}
 }
 
