@@ -6,6 +6,8 @@
 #include "GameFramework/Pawn.h"
 #include "TestTurret.generated.h"
 
+class ABullet;
+
 UCLASS()
 class CAAI_API ATestTurret : public APawn
 {
@@ -24,8 +26,8 @@ public:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	class UStaticMeshComponent* HeadMesh;
 
-	//UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	TSubclassOf<ABullet> AmmoClass;
 
 protected:
 	// Called when the game starts or when spawned
@@ -38,4 +40,5 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void Shoot();
 };

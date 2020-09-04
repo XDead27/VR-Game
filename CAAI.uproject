@@ -11,8 +11,15 @@
 			"LoadingPhase": "Default",
 			"AdditionalDependencies": [
 				"Engine",
-				"HeadMountedDisplay"
+				"HeadMountedDisplay",
+				"AIModule"
 			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "ApexDestruction",
+			"Enabled": true
 		}
 	]
 }

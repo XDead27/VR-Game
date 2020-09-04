@@ -6,6 +6,8 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "VR_Pawn.h"
+#include "Bullet.h"
+#include "Engine/World.h"
 #include "Camera/CameraComponent.h"
 #include "Math/UnrealMathUtility.h" 
 
@@ -43,6 +45,29 @@ void ATestTurret::Tick(float DeltaTime)
 	//Rotate Head Towards Player
 	if (PlayerPawn) {
 		FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(HeadMesh->GetComponentLocation(), PlayerPawn->CameraComponent->GetComponentLocation());
+
+		//Calculate shortest path
+		if (LookAt.Roll - HeadMesh->GetComponentRotation().Roll > 180) {
+			LookAt.Roll -= 360;
+		}
+		else if (LookAt.Roll - HeadMesh->GetComponentRotation().Roll < -180) {
+			LookAt.Roll += 360;
+		}
+
+		if (LookAt.Yaw - HeadMesh->GetComponentRotation().Yaw > 180) {
+			LookAt.Yaw -= 360;
+		}
+		else if (LookAt.Yaw - HeadMesh->GetComponentRotation().Yaw < -180) {
+			LookAt.Yaw += 360;
+		}
+
+		if (LookAt.Pitch - HeadMesh->GetComponentRotation().Pitch > 180) {
+			LookAt.Pitch -= 360;
+		}
+		else if (LookAt.Pitch - HeadMesh->GetComponentRotation().Pitch < -180) {
+			LookAt.Pitch += 360;
+		}
+
 		FRotator Delta;
 		Delta.Roll = FMath::Clamp(LookAt.Roll - HeadMesh->GetComponentRotation().Roll, -HeadMaxSpeed, HeadMaxSpeed);
 		Delta.Yaw = FMath::Clamp(LookAt.Yaw - HeadMesh->GetComponentRotation().Yaw, -HeadMaxSpeed, HeadMaxSpeed);
@@ -60,5 +85,10 @@ void ATestTurret::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void ATestTurret::Shoot()
+{
+	GetWorld()->SpawnActor<ABullet>(AmmoClass, HeadMesh->GetComponentTransform(), FActorSpawnParameters());
 }
 
