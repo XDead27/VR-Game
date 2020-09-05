@@ -24,7 +24,7 @@ public:
 	class UStaticMeshComponent* BaseMesh;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	class UStaticMeshComponent* HeadMesh;
+	class UDestructibleComponent* HeadMesh;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TSubclassOf<ABullet> AmmoClass;
@@ -41,4 +41,10 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void Shoot();
+
+private:
+	bool bIsDead = false;
+
+	UFUNCTION()
+	void SetDead(const FVector& HitPoint, const FVector& HitDirection);
 };

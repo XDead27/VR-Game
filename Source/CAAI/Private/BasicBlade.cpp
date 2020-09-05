@@ -26,7 +26,6 @@ void ABasicBlade::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//BoxCollision->OnComponentHit.AddDynamic(this, &ABasicBlade::MountBlade);
 	BoxCollision->OnComponentBeginOverlap.AddDynamic(this, &ABasicBlade::MountBlade);
 	
 }

@@ -3,6 +3,7 @@
 
 #include "TestTurret.h"
 #include "Components/StaticMeshComponent.h"
+#include "DestructibleComponent.h" 
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "VR_Pawn.h"
@@ -21,7 +22,7 @@ ATestTurret::ATestTurret()
 	BaseMesh = CreateDefaultSubobject<UStaticMeshComponent>("Base Mesh");
 	RootComponent = BaseMesh;
 
-	HeadMesh = CreateDefaultSubobject<UStaticMeshComponent>("Head Mesh");
+	HeadMesh = CreateDefaultSubobject<UDestructibleComponent>("Head Mesh");
 	HeadMesh->SetupAttachment(RootComponent, "HeadSocket");
 
 	HeadMaxSpeed = 2.0f;
@@ -33,6 +34,7 @@ void ATestTurret::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	HeadMesh->OnComponentFracture.AddDynamic(this, &ATestTurret::SetDead);
 }
 
 // Called every frame
@@ -43,7 +45,7 @@ void ATestTurret::Tick(float DeltaTime)
 	AVR_Pawn* PlayerPawn = Cast<AVR_Pawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 
 	//Rotate Head Towards Player
-	if (PlayerPawn) {
+	if (PlayerPawn && !bIsDead) {
 		FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(HeadMesh->GetComponentLocation(), PlayerPawn->CameraComponent->GetComponentLocation());
 
 		//Calculate shortest path
@@ -74,9 +76,6 @@ void ATestTurret::Tick(float DeltaTime)
 		Delta.Pitch = FMath::Clamp(LookAt.Pitch - HeadMesh->GetComponentRotation().Pitch, -HeadMaxSpeed, HeadMaxSpeed);
 
 		HeadMesh->AddRelativeRotation(Delta);
-
-		//UE_LOG(LogTemp, Warning, TEXT("LookAt: %f, %f, %f"), LookAt.Roll, LookAt.Yaw, LookAt.Pitch)
-		//UE_LOG(LogTemp, Warning, TEXT("Delta: %f, %f, %f"), Delta.Roll, Delta.Yaw, Delta.Pitch)
 	}
 }
 
@@ -89,6 +88,15 @@ void ATestTurret::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 void ATestTurret::Shoot()
 {
-	GetWorld()->SpawnActor<ABullet>(AmmoClass, HeadMesh->GetComponentTransform(), FActorSpawnParameters());
+	if (!bIsDead) {
+		GetWorld()->SpawnActor<ABullet>(AmmoClass, HeadMesh->GetComponentTransform(), FActorSpawnParameters());
+	}
+}
+
+void ATestTurret::SetDead(const FVector& HitPoint, const FVector& HitDirection)
+{
+	this->bIsDead = true;
+
+	UE_LOG(LogTemp, Error, TEXT("Is now dead wtf"))
 }
 
