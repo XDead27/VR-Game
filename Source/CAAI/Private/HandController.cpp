@@ -39,10 +39,10 @@ void AHandController::Initialize(FName MotionSource)
 	this->Hand = MotionSource;
 
 	if (Hand == "Left") {
-		MotionController->SetRelativeRotation(FRotator(0.0, 0.0, 180.0));
+		HandMesh->SetRelativeRotation(FRotator(0.0, 0.0, 90.0));
 	}
 	else {
-		MotionController->SetRelativeRotation(FRotator(0.0, 0.0, 0.0));
+		HandMesh->SetRelativeRotation(FRotator(0.0, 0.0, 270.0));
 	}
 }
 
@@ -107,5 +107,14 @@ void AHandController::Drop()
 
 	GrabbedActor = nullptr;
 
+}
+
+float AHandController::GetControllerVelocity()
+{
+	FVector deltaLocation = lastLocation - HandMesh->GetComponentLocation();
+	lastLocation = HandMesh->GetComponentLocation();
+
+	float velocity = deltaLocation.Size() / GetWorld()->GetDeltaSeconds();
+	return velocity;
 }
 

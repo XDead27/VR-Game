@@ -55,6 +55,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Drop();
 
+	UFUNCTION(BlueprintCallable)
+	float GetControllerVelocity();
+
 private:
 	AActor* GrabbedActor;
+	FVector lastLocation;
 };

@@ -11,6 +11,7 @@
 #include "Engine/World.h"
 #include "Camera/CameraComponent.h"
 #include "Math/UnrealMathUtility.h" 
+#include "Public/SphereShieldComponent.h"
 
 
 // Sets default values
