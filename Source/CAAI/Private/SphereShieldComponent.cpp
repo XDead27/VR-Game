@@ -13,6 +13,8 @@ USphereShieldComponent::USphereShieldComponent()
 
 	this->SetGenerateOverlapEvents(true);
 	this->SetNotifyRigidBodyCollision(true);
+
+	this->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 }
 
 
@@ -47,6 +49,8 @@ void USphereShieldComponent::MakePassthru()
 
 void USphereShieldComponent::EnteredShield(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	UE_LOG(LogTemp, Error, TEXT("%s entered shield"), *OtherActor->GetName())
+
 	float actorVelocity = 0.0f;
 
 	if (AHandController* handController = Cast<AHandController>(OtherActor)) {
@@ -56,9 +60,13 @@ void USphereShieldComponent::EnteredShield(UPrimitiveComponent* OverlappedCompon
 		actorVelocity = OtherActor->GetVelocity().Size();
 	}
 
+	UE_LOG(LogTemp, Warning, TEXT("Velocity: %f"), actorVelocity)
+
 	if (actorVelocity > maxVelocity) {
 		MakeSolid();
+		UE_LOG(LogTemp, Warning, TEXT("Shield now solid!"))
 	}
+
 }
 
 void USphereShieldComponent::HitShield(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
